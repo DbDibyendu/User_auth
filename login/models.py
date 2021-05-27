@@ -36,11 +36,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_loggedin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # auth_provider = models.CharField(
-    #     max_length=255, blank=False,
-    #     null=False, default=AUTH_PROVIDERS.get('email'))
+    otp = models.CharField(max_length=255, unique=True,default=0)
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -49,11 +49,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-    def tokens(self):
-        return ''
-        # refresh = RefreshToken.for_user(self)
-        # return {
-        #     'refresh': str(refresh),
-        #     'access': str(refresh.access_token)
-        # }

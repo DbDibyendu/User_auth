@@ -1,7 +1,4 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/django
-# Edit at https://www.toptal.com/developers/gitignore?templates=django
-
 ### Django ###
 *.log
 *.pot
@@ -49,9 +46,6 @@ MANIFEST
 *.manifest
 *.spec
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
 
 # Unit test / coverage reports
 htmlcov/
@@ -70,29 +64,7 @@ pytestdebug.log
 
 # Translations
 *.mo
-
-# Django stuff:
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-doc/_build/
-
-# PyBuilder
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
+*.csv
 
 # pyenv
 .python-version
@@ -157,6 +129,3 @@ Thumbs.db
 
 # profiling data
 .prof
-
-
-# End of https://www.toptal.com/developers/gitignore/api/django
