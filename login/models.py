@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
 
-from django.db import models
 
 
 class UserManager(BaseUserManager):
@@ -24,7 +23,7 @@ class UserManager(BaseUserManager):
         if password is None:
             raise TypeError('Password should not be none')
 
-        user = self.create_user(username, email, password,password)
+        user = self.create_user(username, email, password, password)
         user.is_superuser = True
         user.is_staff = True
         user.save()
@@ -43,8 +42,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     #     max_length=255, blank=False,
     #     null=False, default=AUTH_PROVIDERS.get('email'))
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     objects = UserManager()
 

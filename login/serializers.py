@@ -24,10 +24,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         email = attrs.get('email', '')
         username = attrs.get('username', '')
         password=attrs.get('password','')
-        password2=attrs.get('password2',' ')
+        password2=attrs.get('password2','')
 
         if password != password2:
-            raise serializers.ValidationError("Passwords should be same ")
+            raise serializers.ValidationError("Passwords should be same")
         if not username.isalnum():
             raise serializers.ValidationError(self.default_error_messages)
         return attrs
@@ -36,9 +36,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
 
-# class EmailVerificationSerializer(serializers.ModelSerializer):
-#     token = serializers.CharField(max_length=555)
+class EmailVerificationSerializer(serializers.ModelSerializer):
+    token = serializers.CharField(max_length=555)
 
-#     class Meta:
-#         model = User
-#         fields = ['token']
+    class Meta:
+        model = User
+        fields = ['token']

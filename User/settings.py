@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,14 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 's4^7*gxxbo4ii#tofj-yin1+gvy1m5eg(tf3n%2*p7yg49-zl+'
+SECRET_KEY = config('KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL='login.User'
+AUTH_USER_MODEL = 'login.User'
 
 # Application definition
 
@@ -76,20 +77,21 @@ WSGI_APPLICATION = 'User.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'NAME': str(BASE_DIR / 'db.sqlite3'),
 #     }
 # }
 
 REST_FRAMEWORK = {
-    
+
     'DEFAULT_AUTHENTICATION_CLASSES': (
-    
+
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
-    
+
 }
 
 
@@ -98,7 +100,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'test',
         'CLIENT': {
-           'host': 'mongodb+srv://db:asdf1234@cluster0.vrheh.mongodb.net/test',
+            'host': 'mongodb+srv://db:asdf1234@cluster0.vrheh.mongodb.net/test',
         }
     }
 }
@@ -135,14 +137,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
+# EMAIL SETTINGS, they must be in sequence
+
+
+EMAIL_HOST="mail.fintract.co.uk"
 EMAIL_USE_TLS=True
-EMAIL_HOST='smpt.gmail.com'
+EMAIL_HOST_USER=config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT=587
-EMAIL_HOST_USER='dbdibyendu5@gmail.com'
-EMAIL_HOST_PASSWORD=''
+
