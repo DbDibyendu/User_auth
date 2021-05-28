@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'login',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'User.urls'
 
@@ -87,6 +90,7 @@ WSGI_APPLICATION = 'User.wsgi.application'
 
 REST_FRAMEWORK = {
 
+    'NON_FIELD_ERRORS_KEY' : 'error',
     'DEFAULT_AUTHENTICATION_CLASSES': (
 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -101,10 +105,11 @@ DATABASES = {
         'NAME': 'test',
         'CLIENT': {
             'host': 'mongodb+srv://db:asdf1234@cluster0.vrheh.mongodb.net/test',
+            # 
         }
     }
 }
-
+    
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 

@@ -39,7 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_loggedin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    otp = models.CharField(max_length=255, unique=True,default=0)
+    otp = models.CharField(max_length=255,default=0)
 
 
     USERNAME_FIELD = 'email'
