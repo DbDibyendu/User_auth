@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     otp = models.CharField(max_length=255,default=0)
-
+    otp_time=models.DateTimeField(auto_now=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
