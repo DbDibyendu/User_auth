@@ -89,3 +89,15 @@ class ResetPasswordEmailSerializer(serializers.ModelSerializer):
         fields = ['email']
 
 
+class ResetToken(serializers.ModelSerializer):
+    email = serializers.EmailField(min_length=2)
+    
+    class Meta:
+        model=User
+        fields = ['email']
+
+class UpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['email', 'username', 'password']

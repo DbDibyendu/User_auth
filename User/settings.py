@@ -81,12 +81,12 @@ WSGI_APPLICATION = 'User.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': str(BASE_DIR / 'db.sqlite3'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
+    }
+}
 
 REST_FRAMEWORK = {
 
@@ -99,16 +99,16 @@ REST_FRAMEWORK = {
 }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'test',
-        'CLIENT': {
-            'host': 'mongodb+srv://db:asdf1234@cluster0.vrheh.mongodb.net/test',
-            # 
-        }
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'test',
+#         'CLIENT': {
+#             'host': 'mongodb+srv://db:asdf1234@cluster0.vrheh.mongodb.net/test',
+#             # 
+#         }
+#     }
+# }
     
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

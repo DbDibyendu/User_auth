@@ -1,7 +1,7 @@
 from django.core.mail.message import EmailMessage
 from django.shortcuts import render
 from rest_framework import generics, serializers, status, views, permissions
-from .serializers import RegisterSerializer, EmailVerificationSerializer, LoginSerializer, OTPVerificationSerializer, ResetPasswordEmailSerializer
+from .serializers import RegisterSerializer, EmailVerificationSerializer, UpdateSerializer, ResetToken, LoginSerializer, OTPVerificationSerializer, ResetPasswordEmailSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
@@ -71,14 +71,14 @@ class VerifyEmail(views.APIView):
             return render(request, 'Verified.html', status=status.HTTP_200_OK)
             # return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError as identifier:
-            
-            context={'message':"Activation Expired"}
+
+            context = {'message': "Activation Expired"}
             return render(request, 'InvalidToken.html', context)
             # return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
             # user.delete()
-            context={'message':"Invalid Token"}
-            return render(request, 'InvalidToken.html',context)
+            context = {'message': "Invalid Token"}
+            return render(request, 'InvalidToken.html', context)
             # return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -182,7 +182,7 @@ class ResetPassword(generics.GenericAPIView):
         msg['Subject'] = 'Login OTP'
         msg['From'] = settings.EMAIL_HOST_USER
         msg['To'] = user.email
-        html_message = get_template('mail.html').render(
+        html_message = get_template('password.html').render(
             {'link': password, 'user': user.username})
         msg.add_alternative(html_message, subtype='html')
         server = smtplib.SMTP("mail.fintract.co.uk", 587)
@@ -192,3 +192,65 @@ class ResetPassword(generics.GenericAPIView):
         server.quit()
 
         return Response({'password': 'Successfully Changed'}, status=status.HTTP_200_OK)
+
+
+class NewToken(generics.GenericAPIView):
+
+    serializer_class = ResetToken
+
+    def post(self, request):
+        user_mail = request.POST.get('email')
+        try:
+            user = User.objects.get(email=user_mail)
+        except User.DoesNotExist:
+            user = None
+
+        if not user:
+            return Response({'error': 'Invalid credentials, try again'}, status=status.HTTP_400_BAD_REQUEST)
+        if not user.is_active:
+            return Response({'error': 'Account Dissabled, contact admin'}, status=status.HTTP_400_BAD_REQUEST)
+
+        token = RefreshToken.for_user(user).access_token
+        current_site = get_current_site(request).domain
+        relativeLink = reverse('email-verify')
+
+        absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
+        html_message = get_template('email.html').render(
+            {'link': absurl, 'user': user.username, 'email': user.email})
+
+        msg = EmailMessage()
+        msg['Subject'] = 'Email Verification'
+        msg['From'] = settings.EMAIL_HOST_USER
+        msg['To'] = user.email
+        msg.add_alternative(html_message, subtype='html')
+        server = smtplib.SMTP("mail.fintract.co.uk", 587)
+        server.starttls()
+        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        return Response({'message': 'New token sent'}, status=status.HTTP_201_CREATED)
+
+
+class Update(generics.GenericAPIView):
+
+    serializer_class = UpdateSerializer
+
+    def post(self, request, pk):
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = User.objects.get(id=pk)
+
+        if username != "":
+            user.username = username
+        if email != "":
+            user.email = email
+        if password != "":
+            print(len(password))
+            if len(password) < 7:
+                return Response({'error': "Password too short"},
+                                status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user.password = password
+        user.save()
+        return Response({'message': "Updated Successfully"}, status=status.HTTP_201_CREATED)
