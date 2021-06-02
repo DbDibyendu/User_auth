@@ -179,7 +179,7 @@ class ResetPassword(generics.GenericAPIView):
         user.set_password(password)
         user.save()
         msg = EmailMessage()
-        msg['Subject'] = 'Login OTP'
+        msg['Subject'] = 'New Password'
         msg['From'] = settings.EMAIL_HOST_USER
         msg['To'] = user.email
         html_message = get_template('password.html').render(
@@ -235,7 +235,7 @@ class Update(generics.GenericAPIView):
 
     serializer_class = UpdateSerializer
 
-    def post(self, request, pk):
+    def put(self, request, pk):
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -251,6 +251,6 @@ class Update(generics.GenericAPIView):
                 return Response({'error': "Password too short"},
                                 status=status.HTTP_400_BAD_REQUEST)
             else:
-                user.password = password
+                user.set_password(password)
         user.save()
         return Response({'message': "Updated Successfully"}, status=status.HTTP_201_CREATED)
