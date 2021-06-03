@@ -67,10 +67,6 @@ class LoginSerializer(serializers.ModelSerializer):
         if not user.is_verified:
             raise AuthenticationFailed('Email is not verified')
 
-        # return {
-        #     'email': email,
-        # }
-
         return attrs
 
 class OTPVerificationSerializer(serializers.ModelSerializer):

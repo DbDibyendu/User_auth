@@ -134,7 +134,8 @@ class VerifyOTP(views.APIView):
             user.is_loggedin = True
             user.otp = 0
             user.save()
-            return Response({'email': 'Successfully Logged In'}, status=status.HTTP_200_OK)
+            context={"message":'Successfully Logged In', "user_ID":user.id,"email": user.email,"username":user.username, "password": user.password, "login_status":user.is_loggedin,"verification_status":user.is_verified}
+            return Response(context, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
 
